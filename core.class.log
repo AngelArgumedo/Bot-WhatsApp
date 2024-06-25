@@ -1,0 +1,861 @@
+[handleMsg]:  {
+  key: {
+    remoteJid: '573013120442@s.whatsapp.net',
+    fromMe: false,
+    id: '3EB079E51A809766A51150',
+    participant: undefined
+  },
+  messageTimestamp: 1718651250,
+  pushName: '👀',
+  broadcast: false,
+  message: Message {
+    conversation: 'ahora crea un informe escrito del codigo el cual debe incluir: introduccion, desarrollo (explicacion de codigo) y conclusion\n' +
+      '\n' +
+      'section .data\n' +
+      '    originalArray db 5, 3, 8, 4, 2, 7, 1, 6, 9, 12, 10, 11, 0  ; Arreglo de enteros a ordenar, el 0 marca el final del arreglo\n' +
+      "    msgOriginal db 'Lista original: ', 0xa\n" +
+      '    lenOriginal equ $ - msgOriginal\n' +
+      "    msgSorted db 0xa, 'Lista ordenada: ', 0xa\n" +
+      '    lenSorted equ $ - msgSorted\n' +
+      '\n' +
+      'section .bss\n' +
+      '    tempChar resb 1  ; Reservar 1 byte para el carácter temporal\n' +
+      '\n' +
+      'section .text\n' +
+      '    global _start\n' +
+      '\n' +
+      '_start:\n' +
+      '    ; Imprimir la lista original\n' +
+      '    mov eax, 4\n' +
+      '    mov ebx, 1\n' +
+      '    mov ecx, msgOriginal\n' +
+      '    mov edx, lenOriginal\n' +
+      '    int 0x80\n' +
+      '\n' +
+      '    ; Inicializar el puntero del arreglo original\n' +
+      '    mov esi, originalArray\n' +
+      '\n' +
+      'printOriginalArray:\n' +
+      '    mov al, [esi]\n' +
+      '    cmp al, 0\n' +
+      '    je startSorting  ; Ir al ordenamiento después de imprimir la lista original\n' +
+      '\n' +
+      '    ; Convertir el número a su representación ASCII\n' +
+      "    add al, '0'\n" +
+      '\n' +
+      '    ; Imprimir el número del arreglo\n' +
+      '    mov [tempChar], al\n' +
+      '    mov eax, 4\n' +
+      '    mov ebx, 1\n' +
+      '    mov ecx, tempChar\n' +
+      '    mov edx, 1\n' +
+      '    int 0x80\n' +
+      '\n' +
+      '    ; Imprimir espacio\n' +
+      "    mov byte [tempChar], ' '\n" +
+      '    mov eax, 4\n' +
+      '    mov ebx, 1\n' +
+      '    mov ecx, tempChar\n' +
+      '    mov edx, 1\n' +
+      '    int 0x80\n' +
+      '\n' +
+      '    inc esi\n' +
+      '    jmp printOriginalArray\n' +
+      '\n' +
+      'startSorting:\n' +
+      '    ; Inicializar el puntero del arreglo original\n' +
+      '    mov esi, originalArray\n' +
+      '\n' +
+      'bubbleSort:\n' +
+      '    mov edi, esi\n' +
+      '    mov bl, 0  ; Flag para verificar si hubo intercambios\n' +
+      '\n' +
+      'sortLoop:\n' +
+      '    mov al, [edi]\n' +
+      '    cmp al, 0\n' +
+      '    je checkSwap\n' +
+      '\n' +
+      '    mov dl, [edi+1]\n' +
+      '    cmp dl, 0\n' +
+      '    je checkSwap\n' +
+      '\n' +
+      '    cmp al, dl\n' +
+      '    jbe nextPair\n' +
+      '\n' +
+      '    ; Intercambiar elementos\n' +
+      '    mov [edi], dl\n' +
+      '    mov [edi+1], al\n' +
+      '    mov bl, 1  ; Set flag para indicar que hubo un intercambio\n' +
+      '\n' +
+      'nextPair:\n' +
+      '    inc edi\n' +
+      '    jmp sortLoop\n' +
+      '\n' +
+      'checkSwap:\n' +
+      '    cmp bl, 1\n' +
+      '    je bubbleSort\n' +
+      '\n' +
+      '    ; Imprimir la lista ordenada\n' +
+      '    mov eax, 4\n' +
+      '    mov ebx, 1\n' +
+      '    mov ecx, msgSorted\n' +
+      '    mov edx, lenSorted\n' +
+      '    int 0x80\n' +
+      '\n' +
+      '    ; Inicializar el puntero del arreglo original\n' +
+      '    mov esi, originalArray\n' +
+      '\n' +
+      'printSortedArray:\n' +
+      '    mov al, [esi]\n' +
+      '    cmp al, 0\n' +
+      '    je exitProgram\n' +
+      '\n' +
+      '    ; Convertir el número a su representación ASCII\n' +
+      "    add al, '0'\n" +
+      '\n' +
+      '    ; Imprimir el número del arreglo\n' +
+      '    mov [tempChar], al\n' +
+      '    mov eax, 4\n' +
+      '    mov ebx, 1\n' +
+      '    mov ecx, tempChar\n' +
+      '    mov edx, 1\n' +
+      '    int 0x80\n' +
+      '\n' +
+      '    ; Imprimir espacio\n' +
+      "    mov byte [tempChar], ' '\n" +
+      '    mov eax, 4\n' +
+      '    mov ebx, 1\n' +
+      '    mov ecx, tempChar\n' +
+      '    mov edx, 1\n' +
+      '    int 0x80\n' +
+      '\n' +
+      '    inc esi\n' +
+      '    jmp printSortedArray\n' +
+      '\n' +
+      'exitProgram:\n' +
+      '    ; Salir del programa\n' +
+      '    mov eax, 1\n' +
+      '    xor ebx, ebx\n' +
+      '    int 0x80',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'ahora crea un informe escrito del codigo el cual debe incluir: introduccion, desarrollo (explicacion de codigo) y conclusion\n' +
+    '\n' +
+    'section .data\n' +
+    '    originalArray db 5, 3, 8, 4, 2, 7, 1, 6, 9, 12, 10, 11, 0  ; Arreglo de enteros a ordenar, el 0 marca el final del arreglo\n' +
+    "    msgOriginal db 'Lista original: ', 0xa\n" +
+    '    lenOriginal equ $ - msgOriginal\n' +
+    "    msgSorted db 0xa, 'Lista ordenada: ', 0xa\n" +
+    '    lenSorted equ $ - msgSorted\n' +
+    '\n' +
+    'section .bss\n' +
+    '    tempChar resb 1  ; Reservar 1 byte para el carácter temporal\n' +
+    '\n' +
+    'section .text\n' +
+    '    global _start\n' +
+    '\n' +
+    '_start:\n' +
+    '    ; Imprimir la lista original\n' +
+    '    mov eax, 4\n' +
+    '    mov ebx, 1\n' +
+    '    mov ecx, msgOriginal\n' +
+    '    mov edx, lenOriginal\n' +
+    '    int 0x80\n' +
+    '\n' +
+    '    ; Inicializar el puntero del arreglo original\n' +
+    '    mov esi, originalArray\n' +
+    '\n' +
+    'printOriginalArray:\n' +
+    '    mov al, [esi]\n' +
+    '    cmp al, 0\n' +
+    '    je startSorting  ; Ir al ordenamiento después de imprimir la lista original\n' +
+    '\n' +
+    '    ; Convertir el número a su representación ASCII\n' +
+    "    add al, '0'\n" +
+    '\n' +
+    '    ; Imprimir el número del arreglo\n' +
+    '    mov [tempChar], al\n' +
+    '    mov eax, 4\n' +
+    '    mov ebx, 1\n' +
+    '    mov ecx, tempChar\n' +
+    '    mov edx, 1\n' +
+    '    int 0x80\n' +
+    '\n' +
+    '    ; Imprimir espacio\n' +
+    "    mov byte [tempChar], ' '\n" +
+    '    mov eax, 4\n' +
+    '    mov ebx, 1\n' +
+    '    mov ecx, tempChar\n' +
+    '    mov edx, 1\n' +
+    '    int 0x80\n' +
+    '\n' +
+    '    inc esi\n' +
+    '    jmp printOriginalArray\n' +
+    '\n' +
+    'startSorting:\n' +
+    '    ; Inicializar el puntero del arreglo original\n' +
+    '    mov esi, originalArray\n' +
+    '\n' +
+    'bubbleSort:\n' +
+    '    mov edi, esi\n' +
+    '    mov bl, 0  ; Flag para verificar si hubo intercambios\n' +
+    '\n' +
+    'sortLoop:\n' +
+    '    mov al, [edi]\n' +
+    '    cmp al, 0\n' +
+    '    je checkSwap\n' +
+    '\n' +
+    '    mov dl, [edi+1]\n' +
+    '    cmp dl, 0\n' +
+    '    je checkSwap\n' +
+    '\n' +
+    '    cmp al, dl\n' +
+    '    jbe nextPair\n' +
+    '\n' +
+    '    ; Intercambiar elementos\n' +
+    '    mov [edi], dl\n' +
+    '    mov [edi+1], al\n' +
+    '    mov bl, 1  ; Set flag para indicar que hubo un intercambio\n' +
+    '\n' +
+    'nextPair:\n' +
+    '    inc edi\n' +
+    '    jmp sortLoop\n' +
+    '\n' +
+    'checkSwap:\n' +
+    '    cmp bl, 1\n' +
+    '    je bubbleSort\n' +
+    '\n' +
+    '    ; Imprimir la lista ordenada\n' +
+    '    mov eax, 4\n' +
+    '    mov ebx, 1\n' +
+    '    mov ecx, msgSorted\n' +
+    '    mov edx, lenSorted\n' +
+    '    int 0x80\n' +
+    '\n' +
+    '    ; Inicializar el puntero del arreglo original\n' +
+    '    mov esi, originalArray\n' +
+    '\n' +
+    'printSortedArray:\n' +
+    '    mov al, [esi]\n' +
+    '    cmp al, 0\n' +
+    '    je exitProgram\n' +
+    '\n' +
+    '    ; Convertir el número a su representación ASCII\n' +
+    "    add al, '0'\n" +
+    '\n' +
+    '    ; Imprimir el número del arreglo\n' +
+    '    mov [tempChar], al\n' +
+    '    mov eax, 4\n' +
+    '    mov ebx, 1\n' +
+    '    mov ecx, tempChar\n' +
+    '    mov edx, 1\n' +
+    '    int 0x80\n' +
+    '\n' +
+    '    ; Imprimir espacio\n' +
+    "    mov byte [tempChar], ' '\n" +
+    '    mov eax, 4\n' +
+    '    mov ebx, 1\n' +
+    '    mov ecx, tempChar\n' +
+    '    mov edx, 1\n' +
+    '    int 0x80\n' +
+    '\n' +
+    '    inc esi\n' +
+    '    jmp printSortedArray\n' +
+    '\n' +
+    'exitProgram:\n' +
+    '    ; Salir del programa\n' +
+    '    mov eax, 1\n' +
+    '    xor ebx, ebx\n' +
+    '    int 0x80',
+  from: '573013120442'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573013120442@s.whatsapp.net',
+    fromMe: false,
+    id: '3EB0E2AB55AFA5CAC96B0A',
+    participant: undefined
+  },
+  messageTimestamp: 1718652747,
+  pushName: '👀',
+  broadcast: false,
+  message: Message {
+    conversation: 'modifica este codigo de emu8086 para que no luzca igual y aplica clean code\n' +
+      '\n' +
+      '.model small\n' +
+      '.stack 100h\n' +
+      '\n' +
+      '.data\n' +
+      '    arr db 5, 8, 9, 7, 12, 10, 4, 1, 3, 2, 6, 11, 0\n' +
+      '    size dw 12\n' +
+      "    msg1 db 'Arreglo original:', 0Dh, 0Ah, '$'\n" +
+      "    msg2 db 0Dh, 0Ah, 'Arreglo ordenado:', 0Dh, 0Ah, '$'\n" +
+      '    temp db 0\n' +
+      '\n' +
+      '.code\n' +
+      '\n' +
+      'COMPARA MACRO ptr, index\n' +
+      '    mov al, [ptr + index]\n' +
+      '    mov ah, [ptr + index + 1]\n' +
+      '    cmp al, ah\n' +
+      '    jbe skipSwap\n' +
+      '\n' +
+      '    ; Intercambiar arr[index] y arr[index + 1]\n' +
+      '    xchg al, ah\n' +
+      '    mov [ptr + index], al\n' +
+      '    mov [ptr + index + 1], ah\n' +
+      'skipSwap:\n' +
+      'ENDM\n' +
+      '\n' +
+      'IMPRIME MACRO char\n' +
+      '    mov dl, char\n' +
+      '    mov ah, 02h\n' +
+      '    int 21h\n' +
+      'ENDM\n' +
+      '\n' +
+      'main proc\n' +
+      '    mov ax, @data\n' +
+      '    mov ds, ax\n' +
+      '\n' +
+      '    ; Imprimir el mensaje "Arreglo original"\n' +
+      '    lea dx, msg1\n' +
+      '    mov ah, 09h\n' +
+      '    int 21h\n' +
+      '\n' +
+      '    ; Imprimir el arreglo original\n' +
+      '    lea bx, arr\n' +
+      '    mov cx, size\n' +
+      '    call ImprimeArreglo\n' +
+      '\n' +
+      '    ; Ordenar el arreglo usando burbuja\n' +
+      '    call ordenamiento\n' +
+      '\n' +
+      '    ; Imprimir el mensaje "Arreglo ordenado"\n' +
+      '    lea dx, msg2\n' +
+      '    mov ah, 09h\n' +
+      '    int 21h\n' +
+      '\n' +
+      '    ; Imprimir el arreglo ordenado\n' +
+      '    lea bx, arr\n' +
+      '    mov cx, size\n' +
+      '    call ImprimeArreglo\n' +
+      '\n' +
+      '    ; Terminar el programa\n' +
+      '    mov ax, 4C00h\n' +
+      '    int 21h\n' +
+      'main endp\n' +
+      '\n' +
+      '; Procedimiento para imprimir el arreglo\n' +
+      'ImprimeArreglo proc\n' +
+      '    push cx         ; Guardar el tamaño del arreglo\n' +
+      '\n' +
+      'printLoop:\n' +
+      '    mov al, [bx]\n' +
+      '    cmp al, 0\n' +
+      '    je endPrint     ; Verificar fin de arreglo\n' +
+      "    add al, '0'     ; Convertir a carácter ASCII\n" +
+      '    IMPRIME al   ; Usar macro para imprimir el carácter\n' +
+      '\n' +
+      '    ; Imprimir un espacio\n' +
+      "    IMPRIME ' '\n" +
+      '\n' +
+      '    inc bx\n' +
+      '    loop printLoop  ; Repetir para todos los elementos del arreglo\n' +
+      '\n' +
+      'endPrint:\n' +
+      '    pop cx          ; Restaurar el tamaño del arreglo\n' +
+      '    ret\n' +
+      'ImprimeArreglo endp\n' +
+      '\n' +
+      '; Procedimiento para ordenar el arreglo usando burbuja\n' +
+      'ordenamiento proc\n' +
+      '    mov cx, size\n' +
+      '    dec cx          ; CX = n-1\n' +
+      '\n' +
+      'outerLoop:\n' +
+      '    push cx         ; Guardar el contador exterior\n' +
+      '    mov dx, cx      ; DX = n-1-i\n' +
+      '\n' +
+      'ciclo_int:\n' +
+      '    lea bx, arr\n' +
+      '    mov si, dx\n' +
+      '    sub si, cx      ; SI = j\n' +
+      '\n' +
+      '    ; COMPARAr y posiblemente intercambiar arr[j] y arr[j+1]\n' +
+      '    COMPARA bx, si\n' +
+      '\n' +
+      '    loop ciclo_int  ; Repetir el bucle interior\n' +
+      '\n' +
+      '    pop cx          ; Recuperar el contador exterior\n' +
+      '    loop outerLoop  ; Repetir el bucle exterior\n' +
+      '    ret\n' +
+      'ordenamiento endp\n' +
+      '\n' +
+      'end main',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'modifica este codigo de emu8086 para que no luzca igual y aplica clean code\n' +
+    '\n' +
+    '.model small\n' +
+    '.stack 100h\n' +
+    '\n' +
+    '.data\n' +
+    '    arr db 5, 8, 9, 7, 12, 10, 4, 1, 3, 2, 6, 11, 0\n' +
+    '    size dw 12\n' +
+    "    msg1 db 'Arreglo original:', 0Dh, 0Ah, '$'\n" +
+    "    msg2 db 0Dh, 0Ah, 'Arreglo ordenado:', 0Dh, 0Ah, '$'\n" +
+    '    temp db 0\n' +
+    '\n' +
+    '.code\n' +
+    '\n' +
+    'COMPARA MACRO ptr, index\n' +
+    '    mov al, [ptr + index]\n' +
+    '    mov ah, [ptr + index + 1]\n' +
+    '    cmp al, ah\n' +
+    '    jbe skipSwap\n' +
+    '\n' +
+    '    ; Intercambiar arr[index] y arr[index + 1]\n' +
+    '    xchg al, ah\n' +
+    '    mov [ptr + index], al\n' +
+    '    mov [ptr + index + 1], ah\n' +
+    'skipSwap:\n' +
+    'ENDM\n' +
+    '\n' +
+    'IMPRIME MACRO char\n' +
+    '    mov dl, char\n' +
+    '    mov ah, 02h\n' +
+    '    int 21h\n' +
+    'ENDM\n' +
+    '\n' +
+    'main proc\n' +
+    '    mov ax, @data\n' +
+    '    mov ds, ax\n' +
+    '\n' +
+    '    ; Imprimir el mensaje "Arreglo original"\n' +
+    '    lea dx, msg1\n' +
+    '    mov ah, 09h\n' +
+    '    int 21h\n' +
+    '\n' +
+    '    ; Imprimir el arreglo original\n' +
+    '    lea bx, arr\n' +
+    '    mov cx, size\n' +
+    '    call ImprimeArreglo\n' +
+    '\n' +
+    '    ; Ordenar el arreglo usando burbuja\n' +
+    '    call ordenamiento\n' +
+    '\n' +
+    '    ; Imprimir el mensaje "Arreglo ordenado"\n' +
+    '    lea dx, msg2\n' +
+    '    mov ah, 09h\n' +
+    '    int 21h\n' +
+    '\n' +
+    '    ; Imprimir el arreglo ordenado\n' +
+    '    lea bx, arr\n' +
+    '    mov cx, size\n' +
+    '    call ImprimeArreglo\n' +
+    '\n' +
+    '    ; Terminar el programa\n' +
+    '    mov ax, 4C00h\n' +
+    '    int 21h\n' +
+    'main endp\n' +
+    '\n' +
+    '; Procedimiento para imprimir el arreglo\n' +
+    'ImprimeArreglo proc\n' +
+    '    push cx         ; Guardar el tamaño del arreglo\n' +
+    '\n' +
+    'printLoop:\n' +
+    '    mov al, [bx]\n' +
+    '    cmp al, 0\n' +
+    '    je endPrint     ; Verificar fin de arreglo\n' +
+    "    add al, '0'     ; Convertir a carácter ASCII\n" +
+    '    IMPRIME al   ; Usar macro para imprimir el carácter\n' +
+    '\n' +
+    '    ; Imprimir un espacio\n' +
+    "    IMPRIME ' '\n" +
+    '\n' +
+    '    inc bx\n' +
+    '    loop printLoop  ; Repetir para todos los elementos del arreglo\n' +
+    '\n' +
+    'endPrint:\n' +
+    '    pop cx          ; Restaurar el tamaño del arreglo\n' +
+    '    ret\n' +
+    'ImprimeArreglo endp\n' +
+    '\n' +
+    '; Procedimiento para ordenar el arreglo usando burbuja\n' +
+    'ordenamiento proc\n' +
+    '    mov cx, size\n' +
+    '    dec cx          ; CX = n-1\n' +
+    '\n' +
+    'outerLoop:\n' +
+    '    push cx         ; Guardar el contador exterior\n' +
+    '    mov dx, cx      ; DX = n-1-i\n' +
+    '\n' +
+    'ciclo_int:\n' +
+    '    lea bx, arr\n' +
+    '    mov si, dx\n' +
+    '    sub si, cx      ; SI = j\n' +
+    '\n' +
+    '    ; COMPARAr y posiblemente intercambiar arr[j] y arr[j+1]\n' +
+    '    COMPARA bx, si\n' +
+    '\n' +
+    '    loop ciclo_int  ; Repetir el bucle interior\n' +
+    '\n' +
+    '    pop cx          ; Recuperar el contador exterior\n' +
+    '    loop outerLoop  ; Repetir el bucle exterior\n' +
+    '    ret\n' +
+    'ordenamiento endp\n' +
+    '\n' +
+    'end main',
+  from: '573013120442'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573013120442@s.whatsapp.net',
+    fromMe: false,
+    id: '3EB0041D602448BEA3B287',
+    participant: undefined
+  },
+  messageTimestamp: 1718653183,
+  pushName: '👀',
+  broadcast: false,
+  message: Message {
+    conversation: 'ahora crea un reporte general del codigo que acabas de generar el cual debe incluir: introduccion, desarrollo(explicacion del codigo), conclusión',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'ahora crea un reporte general del codigo que acabas de generar el cual debe incluir: introduccion, desarrollo(explicacion del codigo), conclusión',
+  from: '573013120442'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: 'EE40CE2A876AB3303C27650F53261BA5',
+    participant: undefined
+  },
+  messageTimestamp: 1718663073,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    conversation: 'Hl',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'Hl',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: 'D18BEBBFA51FACC4D9ED69E9D9B9AC3F',
+    participant: undefined
+  },
+  messageTimestamp: 1718663084,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    conversation: 'quien es',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'quien es',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: '092226C5487EA090FCFB5C177CC7E33B',
+    participant: undefined
+  },
+  messageTimestamp: 1718663087,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    conversation: '??',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: '??',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: '8432058B5F61AFD97DAE624D8AB79D18',
+    participant: undefined
+  },
+  messageTimestamp: 1718663102,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    conversation: '???',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: '???',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: 'DA2073583B385AC93D11C525F1DE1163',
+    participant: undefined
+  },
+  messageTimestamp: 1718663104,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    conversation: 'Mm',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'Mm',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: '78F0F0F02531473FA8498EA5D26A957E',
+    participant: undefined
+  },
+  messageTimestamp: 1718663124,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    conversation: 'Quien es ???',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'Quien es ???',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '573007163421@s.whatsapp.net',
+    fromMe: false,
+    id: 'B181991A256DAB4CF92B4E71D52EE18F',
+    participant: undefined
+  },
+  messageTimestamp: 1718663129,
+  pushName: 'Aylyn Gabriela 👸🏽🫶🏽',
+  broadcast: false,
+  message: Message {
+    extendedTextMessage: ExtendedTextMessage {
+      text: 'Yes',
+      previewType: 0,
+      contextInfo: [ContextInfo],
+      inviteLinkGroupTypeV2: 0
+    },
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2
+    }
+  },
+  body: 'Yes',
+  from: '573007163421'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_f6a335f7-17a5-474a-bd37-00c38edf572d',
+  keyword: 'key_57006773-1dcc-4591-8b68-109b41724fd5',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: 'b1ddf1bb106747d1a53814155b576fa0'
+}
