@@ -2,8 +2,11 @@ const { postCompletion } = require('./services/LLM');
 const { saveAudio, convertOggMp3 } = require('./services/procesarAud');
 const { transcribeAudio } = require('./services/whisper');
 const { removeTempFiles } = require('./services/remove');
+
 const { savePDF } = require('./services/downloadPDF');
 const { extractTextFromPDF } = require('./services/pdfProcessor');
+const { retrieveRelevantTexts } = require('./services/ragProcessor');
+
 const { textToVoice } = require('./services/elevenLab');
 const { savePhoto } = require('./services/downImages');
 const { generateImageFromText, recognizeImage } = require('./services/huggingface');
@@ -158,50 +161,85 @@ const flowAudio = addKeyword(EVENTS.VOICE_NOTE)
         }
     });
 
+
 // Flow para manejar PDFs
-const flowPDF = addKeyword('pdf:')
-    .addAnswer(
-        ['Por favor adjunta el documento PDF que quieres que procese y escribe lo que deseas hacer (por ejemplo, "resumen" o "análisis").'],
-        null,
-        async (ctx, { flowDynamic, state }) => {
-            state.pdfAction = ctx.body.replace(/^pdf:/i, '').trim();
-            console.log('Esperando adjunto PDF...');
-        }
-    )
+const flowPDF = addKeyword(EVENTS.DOCUMENT)
     .addAction(async (ctx, ctxFn) => {
+        console.log('Iniciando flujo de manejo de PDF...');
         if (!isWhitelisted(ctx.from)) {
             await ctxFn.flowDynamic('No tiene acceso al bot.');
+            console.log('Acceso denegado.');
             return;
         }
-
-        if (!ctx.hasMedia) {
-            await ctxFn.flowDynamic('Por favor adjunta un documento PDF.');
-            return;
-        }
-
         try {
+            console.log('Intentando guardar el PDF...');
             const pdfFilePath = await savePDF(ctx);
             const pdfFileName = path.basename(pdfFilePath, path.extname(pdfFilePath));
             console.log(`PDF guardado: ${pdfFileName}`);
 
-            const pdfText = await extractTextFromPDF(pdfFilePath, pdfFileName);
-            const messages = await createMessagesWithHistory(ctx.from, `PDF adjunto: ${pdfFileName}. ${state.pdfAction}`);
-            const answer = await postCompletion(messages);
+            await ctxFn.flowDynamic('Dame un momento, estoy leyendo el PDF...');
 
-            await ctxFn.flowDynamic(answer);
-            await logConversation(ctx.from, `PDF adjunto: ${pdfFileName}. ${state.pdfAction}`, answer);
+            console.log('Extrayendo texto del PDF...');
+            const pdfText = await extractTextFromPDF(pdfFilePath, pdfFileName);
+            console.log('Texto extraído del PDF.');
+            await ctxFn.flowDynamic('Listo, ahora me puedes preguntarle algo sobre el PDF.');
+            
         } catch (error) {
             console.error('Error al procesar el documento:', error);
             await ctxFn.flowDynamic('Lo siento, ha ocurrido un error al procesar tu documento. Por favor, inténtalo de nuevo más tarde.');
         }
     });
 
+// Flow para preguntas relacionadas con PDFs
+const flowQueryPDF = addKeyword('pdf:')
+    .addAnswer(
+        ['espera'],
+        null,
+        async (ctx, { flowDynamic }) => {  // Elimina el parámetro 'state' si no se usa
+            if (!isWhitelisted(ctx.from)) {
+                await flowDynamic('No tiene acceso al bot.');
+                return;
+            }
+            try {
+                const query = ctx.body.replace(/^pdf:/i, '').trim();
+                console.log(`Realizando consulta: ${query}`);
+
+                const userDirPath = path.join(process.cwd(), 'tmp', ctx.from);
+
+                // Cargar todos los PDFs del usuario
+                const allPdfsPath = path.join(userDirPath, 'allPdfs.json');
+                const rawData = await fs.promises.readFile(allPdfsPath, 'utf8');
+                const allPdfs = JSON.parse(rawData);
+
+                // Crear contexto con todos los textos de los PDFs
+                const context = allPdfs.map(doc => `${doc.fileName}\n${doc.extractedText}`).join('\n\n');
+
+                const messages = [
+                    { role: 'system', content: process.env.BOT_PROMPT },
+                    { role: 'user', content: `Consulta: ${query}` },
+                    { role: 'user', content: `Contexto relevante:\n${context}` }
+                ];
+
+                // Obtener respuesta de OpenAI
+                const answer = await postCompletion(messages);
+
+                console.log('Respuesta generada.');
+                await flowDynamic(answer);
+                await logConversation(ctx.from, `Consulta: ${query}`, answer);
+            } catch (error) {
+                console.error('Error al gemerar respuesta:', error);
+                await flowDynamic('Lo siento, ha ocurrido un error al generar una respuesta. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+    );
+
+
 // Flow de Text-to-Speech
 const flowTTS = addKeyword('tts:')
     .addAnswer(
         ["Espera en lo que me grabo hablando 🗣."],
         null,
-        async (ctx, { flowDynamic, state }) => {
+        async (ctx, { flowDynamic }) => {  // Elimina el parámetro 'state' si no se usa
             if (!isWhitelisted(ctx.from)) {
                 await flowDynamic('No tiene acceso al bot.');
                 return;
@@ -210,9 +248,9 @@ const flowTTS = addKeyword('tts:')
                 const userInput = ctx.body.replace(/^tts:/i, '').trim();
                 const messages = await createMessagesWithHistory(ctx.from, userInput);
                 const gptResponse = await postCompletion(messages);
-                const audioFilePath = await textToVoice(gptResponse);
+                const audioFilePath = await textToVoice(gptResponse, ctx.from);  // Pasa el ID del usuario aquí
                 console.log(`Audio generado y guardado en: ${audioFilePath}`);
-                await flowDynamic([{ body: "Aquí esta tu respuesta 😊", media: audioFilePath }]);
+                await flowDynamic([{ body: "Aquí está tu respuesta 😊", media: audioFilePath }]);
                 await logConversation(ctx.from, userInput, gptResponse);
                 console.log('¡Tu texto ha sido convertido a audio con éxito!');
             } catch (error) {
@@ -220,7 +258,7 @@ const flowTTS = addKeyword('tts:')
                 await flowDynamic('Lo siento, ha ocurrido un error al generar el audio. Por favor, inténtalo de nuevo más tarde.');
             }
         }
-);
+    );
 
 // Flujo para generar imágenes a partir de texto
 const flowGenerateImageFromText = addKeyword('imagina:')
@@ -275,7 +313,7 @@ const flowImageRecognition = addKeyword(EVENTS.MEDIA)
 // Funcion main
 const main = async () => {
     const adapterDB = new MockAdapter();
-    const adapterFlow = createFlow([flowHelp, flowOpenai, flowAudio, flowPDF, flowTTS, flowGenerateImageFromText, flowImageRecognition]);
+    const adapterFlow = createFlow([flowHelp, flowOpenai, flowAudio, flowPDF, flowQueryPDF, flowTTS, flowGenerateImageFromText, flowImageRecognition]);
     const adapterProvider = createProvider(BaileysProvider);
 
     createBot({

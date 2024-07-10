@@ -1,14 +1,16 @@
-const fetch = require('node-fetch');
 const fs = require('node:fs');
 const path = require('path');
 
 /**
  * Genera un archivo de audio a partir de un texto usando ElevenLabs.
  * @param {string} text - El texto a convertir en audio.
+ * @param {string} userId - ID del usuario para guardar el archivo en su carpeta.
  * @param {string} [voiceId='797Idj5Tpd3F66peOrOx'] - ID de la voz a usar.
  * @returns {Promise<string>} - La ruta del archivo de audio generado.
  */
-const textToVoice = async (text, voiceId = '797Idj5Tpd3F66peOrOx') => {
+const textToVoice = async (text, userId, voiceId = '797Idj5Tpd3F66peOrOx') => {
+    const fetch = (await import('node-fetch')).default;
+
     const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
     const URL = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
 
@@ -29,8 +31,12 @@ const textToVoice = async (text, voiceId = '797Idj5Tpd3F66peOrOx') => {
 
     const response = await fetch(URL, { method: "POST", headers, body });
     const buffer = await response.arrayBuffer();
-    const audioFilePath = path.join(process.cwd(), 'tmp', `${Date.now()}-audio.mp3`);
-    fs.writeFileSync(audioFilePath, Buffer.from(buffer));
+
+    const userDirPath = path.join(process.cwd(), 'tmp', userId);
+    await fs.promises.mkdir(userDirPath, { recursive: true });  // Crear el directorio del usuario si no existe
+
+    const audioFilePath = path.join(userDirPath, `${Date.now()}-audio.mp3`);
+    await fs.promises.writeFile(audioFilePath, Buffer.from(buffer));
 
     return audioFilePath;
 };

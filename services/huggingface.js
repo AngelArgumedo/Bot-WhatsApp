@@ -1,10 +1,11 @@
 // huggingface.js
-const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config(); // Carga las variables de entorno
 
 const generateImageFromText = async (text, userNumber) => {
+    const fetch = (await import('node-fetch')).default;
+
     try {
         const response = await fetch(
             'https://api-inference.huggingface.co/models/ZB-Tech/Text-to-Image',
@@ -34,6 +35,8 @@ const generateImageFromText = async (text, userNumber) => {
 };
 
 const recognizeImage = async (imagePath) => {
+    const fetch = (await import('node-fetch')).default;
+
     try {
         const data = fs.readFileSync(imagePath);
         const response = await fetch(
